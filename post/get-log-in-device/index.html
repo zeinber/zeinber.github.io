@@ -7,19 +7,19 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-<title>真机下获取 NSLog 日志文件 - zeinber&#39;s Blog</title>
+<title>真机下获取 NSLog 日志 - zeinber&#39;s Blog</title>
 
 
-    <meta name="description" content="当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍如何在真机运行程序时将 NSLog 的输出存成日志文件。">
+    <meta name="description" content="当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍2种如何在真机运行程序时将 NSLog 的输出存成日志文件。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="真机下获取 NSLog 日志文件">
+<meta property="og:title" content="真机下获取 NSLog 日志">
 <meta property="og:url" content="https://blog.zeinber.top/post/get-log-in-device/index.html">
 <meta property="og:site_name" content="zeinber&#39;s Blog">
-<meta property="og:description" content="当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍如何在真机运行程序时将 NSLog 的输出存成日志文件。">
+<meta property="og:description" content="当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍2种如何在真机运行程序时将 NSLog 的输出存成日志文件。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog.zeinber.top/images/og_image.png">
 <meta property="article:published_time" content="2017-11-08T07:43:11.000Z">
-<meta property="article:modified_time" content="2020-03-07T09:19:34.794Z">
+<meta property="article:modified_time" content="2020-03-14T11:29:00.271Z">
 <meta property="article:author" content="zeinber">
 <meta property="article:tag" content="调试">
 <meta name="twitter:card" content="summary">
@@ -81,7 +81,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="真机下获取 NSLog 日志文件" height="28">
+                <img src="/images/logo.svg" alt="真机下获取 NSLog 日志" height="28">
             
             </a>
         </div>
@@ -144,7 +144,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    3 分钟 读完 (大约 401 个字)
+                    3 分钟 读完 (大约 478 个字)
                 </span>
                 
                 
@@ -158,21 +158,23 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                真机下获取 NSLog 日志文件
+                真机下获取 NSLog 日志
             
         </h1>
         <div class="content">
-            <p>当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍如何在真机运行程序时将 NSLog 的输出存成日志文件。</p>
+            <p>当使用 Xcode 进行调试的时候，开发者可以通过 Xcode 的控制台查看输出的 Log 日志，方便进行程序调试。实际上，在脱离了 Xcode 的情况下，调用 NSLog 依旧有用。下面将介绍2种如何在真机运行程序时将 NSLog 的输出存成日志文件。</p>
 <a id="more"></a>
 
-<h2 id="保存日志文件"><a href="#保存日志文件" class="headerlink" title="保存日志文件"></a>保存日志文件</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - 将NSLog的输出信息写入到log文件中，并输出为log文件</span></span><br><span class="line"><span class="comment">// 将NSLog打印信息保存到Documents目录下的文件中</span></span><br><span class="line">- (<span class="keyword">void</span>)redirectNSlogToDocumentFolder &#123;</span><br><span class="line">    <span class="comment">// 存于Document文件夹</span></span><br><span class="line">    <span class="built_in">NSArray</span> *paths = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>);</span><br><span class="line">    <span class="built_in">NSString</span> *documentDirectory = [paths objectAtIndex:<span class="number">0</span>];</span><br><span class="line">    <span class="built_in">NSString</span> *fileName = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@.log"</span>,[[<span class="built_in">NSDate</span> alloc] initWithTimeIntervalSinceNow:<span class="number">8</span>*<span class="number">3600</span>]]; <span class="comment">// 注意不是NSData!</span></span><br><span class="line">    <span class="built_in">NSString</span> *logFilePath = [documentDirectory stringByAppendingPathComponent:fileName];</span><br><span class="line">    <span class="comment">// 将log输入到文件</span></span><br><span class="line">    freopen([logFilePath cStringUsingEncoding:<span class="built_in">NSASCIIStringEncoding</span>],<span class="string">"a+"</span>,stderr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="控制台查看日志"><a href="#控制台查看日志" class="headerlink" title="控制台查看日志"></a>控制台查看日志</h2><p>手机连接到 MAC 上，然后打开 <code>控制台.app</code>, 在左侧列表里找到设备，右边列表里就会输出手机上的所有日志。在上方搜索栏里输入 <code>App的二进制名</code>，选择 <code>进程</code>，过滤出 App 的输出日志</p>
+<h2 id="本地查看日志"><a href="#本地查看日志" class="headerlink" title="本地查看日志"></a>本地查看日志</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> mark - 将NSLog的输出信息写入到log文件中，并输出为log文件</span></span><br><span class="line">- (<span class="keyword">void</span>)redirectNSLogToDocumentFolder &#123;</span><br><span class="line">    <span class="comment">/// 存于Documents文件夹</span></span><br><span class="line">    <span class="built_in">NSArray</span> *paths = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>);</span><br><span class="line">    <span class="built_in">NSString</span> *documentDirectory = [paths objectAtIndex:<span class="number">0</span>];</span><br><span class="line">    <span class="built_in">NSString</span> *fileName = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@.log"</span>,[[<span class="built_in">NSDate</span> alloc] initWithTimeIntervalSinceNow:<span class="number">8</span>*<span class="number">3600</span>]];</span><br><span class="line">    <span class="built_in">NSString</span> *logFilePath = [documentDirectory stringByAppendingPathComponent:fileName];</span><br><span class="line">    <span class="comment">/// 将控制台的log输入到文件，此时控制台将不会输出 log</span></span><br><span class="line">    freopen([logFilePath cStringUsingEncoding:<span class="built_in">NSASCIIStringEncoding</span>],<span class="string">"a+"</span>,stderr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上述的方法一般在程序的入口调用，即：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)application(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">     <span class="comment">//保存真机调试日志文件</span></span><br><span class="line">     [<span class="keyword">self</span> redirectNSLogToDocumentFolder];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">BOOL</span>)application(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">     <span class="comment">/// 保存真机调试日志文件到沙盒 Documents 目录</span></span><br><span class="line">     [<span class="keyword">self</span> redirectNSLogToDocumentFolder];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>为了在下一步骤里能查看 log 文件，在此需要先开启查看权限。具体步骤:<br>在应用程序的 Info.plist 文件中添加 UIFileSharingEnabled 键，并将键值设置为 YES 。<br>编译运行在真机上。</p>
-<h2 id="查看日志文件"><a href="#查看日志文件" class="headerlink" title="查看日志文件"></a>查看日志文件</h2><p>退出 mac 上的 iTunes ，将手机重新与电脑相连，此时会弹出 itunes ，信任电脑建立连接后，选中侧边栏中的文件共享，对应的项目，在右侧列表中就能看到 Log 文件夹，选中以后另存为即可。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/3983945-858cc54ceb9ea77e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="导出 Log 日志文件"></p>
+<p>为了在下一步骤里能查看 log 文件，在此需要先开启查看权限。具体步骤:<br>在应用程序的 <code>Info.plist</code> 文件中添加 <code>UIFileSharingEnabled</code> 键，并将键值设置为 YES，编译运行在真机上。</p>
+<h3 id="查看日志文件"><a href="#查看日志文件" class="headerlink" title="查看日志文件"></a>查看日志文件</h3><p>手机连接上 MAC，然后打开 Xcode ，根据路径 <code>Xcode -&gt; Window -&gt; Devices and Simulators</code> 进入到如下页面。</p>
+<p><img src="device-appcontainer-output.png" alt="Devices and Simulators"></p>
+<p>在 <code>INSTALLED APPS</code> 中找到刚才输出日志的 App 包，点击左下角的齿轮键 ，在弹出菜单中选择 <code>Download Container...</code> ，就可以获取 App 沙盒信息，从 <code>Documents</code> 中找到刚才输出的日志</p>
 
         </div>
         
@@ -504,14 +506,14 @@
             
             <a href="/post/get-log-in-device/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="真机下获取 NSLog 日志文件">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="真机下获取 NSLog 日志">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-11-08T07:43:11.000Z">2017-11-08</time></div>
-                    <a href="/post/get-log-in-device/" class="title has-link-black-ter is-size-6 has-text-weight-normal">真机下获取 NSLog 日志文件</a>
+                    <a href="/post/get-log-in-device/" class="title has-link-black-ter is-size-6 has-text-weight-normal">真机下获取 NSLog 日志</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/iOS/">iOS</a>
                     </p>
@@ -832,14 +834,14 @@
             
             <a href="/post/get-log-in-device/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="真机下获取 NSLog 日志文件">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="真机下获取 NSLog 日志">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2017-11-08T07:43:11.000Z">2017-11-08</time></div>
-                    <a href="/post/get-log-in-device/" class="title has-link-black-ter is-size-6 has-text-weight-normal">真机下获取 NSLog 日志文件</a>
+                    <a href="/post/get-log-in-device/" class="title has-link-black-ter is-size-6 has-text-weight-normal">真机下获取 NSLog 日志</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/iOS/">iOS</a>
                     </p>
@@ -1094,7 +1096,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="真机下获取 NSLog 日志文件" height="28">
+                    <img src="/images/logo.svg" alt="真机下获取 NSLog 日志" height="28">
                 
                 </a>
                 <p class="is-size-7">
