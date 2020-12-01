@@ -1,23 +1,21 @@
-language: node_js
-
-os: linux
-
-cache: false
-
-jobs:
-  include:
-    - stage: github pages
-      node_js: "10"
-      script:
-        - echo "Publish site to github pages ..."
-        - npm install -g hexo-cli
-        - hexo algolia
-        - hexo g
-      deploy:
-        provider: pages
-        token: $GH_TOKEN
-        keep_history: false
-        local_dir: public
-        skip_cleanup: true
-        on:
-          branch: sourceCode
+sudo: required
+node_js:
+  - '12'
+cache: npm
+install:
+  - npm install -g hexo-cli
+  - npm install hexo
+  - npm install
+script:
+  - hexo clean
+  - hexo generate
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: public
+  github_token: $GH_TOKEN
+  target_branch: master
+  committer_from_gh: true
+  keep_history: true
+  on:
+    branch: sourceCode
