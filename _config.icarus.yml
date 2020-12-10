@@ -1,8 +1,8 @@
 version: 4.0.0
 variant: default
-logo: /img/elabosak.svg
+logo: /img/logo.svg
 head:
-    favicon: /img/fav.svg
+    favicon: /img/favicon.svg
     open_graph:
         title: 
         type: 
@@ -37,21 +37,21 @@ navbar:
     links:
         GitHub:
             icon: fab fa-github
-            url: 'https://github.com/ElaBosak233'
-footer:
-    links:
-        Creative Commons:
-            icon: fab fa-creative-commons
-            url: 'https://creativecommons.org/'
-        Attribution 4.0 International:
-            icon: fab fa-creative-commons-by
-            url: 'https://creativecommons.org/licenses/by/4.0/'
-        NonCommercial:
-            icon: fab fa-creative-commons-nc
-            url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
-        ShareAlike:
-            icon: fab fa-creative-commons-sa
-            url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
+            url: 'https://github.com/zeinber'
+# footer:
+#     links:
+#         Creative Commons:
+#             icon: fab fa-creative-commons
+#             url: 'https://creativecommons.org/'
+#         Attribution 4.0 International:
+#             icon: fab fa-creative-commons-by
+#             url: 'https://creativecommons.org/licenses/by/4.0/'
+#         NonCommercial:
+#             icon: fab fa-creative-commons-nc
+#             url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
+#         ShareAlike:
+#             icon: fab fa-creative-commons-sa
+#             url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en'
 article:
     highlight:
         theme: atom-one-light
@@ -66,24 +66,24 @@ article:
         'CC BY-NC-SA 4.0': 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
 search:
     type: insight
-comment:
-    type: gitalk
-    client_id: 8687afbf31f0041f005d
-    client_secret: 9949b2971fa855443467af73220daa9e8c0612fd
-    repo: ElaBosak233.github.io
-    owner: ElaBosak233
-    admin:
-        - ElaBosak233
-donates:
-    -
-        type: alipay
-        qrcode: /img/alipay.png
-    -
-        type: afdian
-        url: 'https://afdian.net/@ElaBosak233'
-    -
-        type: buymeacoffee
-        url: 'https://www.buymeacoffee.com/ElaBosak233'
+# comment:
+#     type: gitalk
+#     client_id: 8687afbf31f0041f005d
+#     client_secret: 9949b2971fa855443467af73220daa9e8c0612fd
+#     repo: ElaBosak233.github.io
+#     owner: ElaBosak233
+#     admin:
+#         - ElaBosak233
+# donates:
+#     -
+#         type: alipay
+#         qrcode: /img/alipay.png
+#     -
+#         type: afdian
+#         url: 'https://afdian.net/@ElaBosak233'
+#     -
+#         type: buymeacoffee
+#         url: 'https://www.buymeacoffee.com/ElaBosak233'
     # -
     #     type: wechat
     #     qrcode: ''
@@ -99,29 +99,13 @@ widgets:
     -
         position: left
         type: profile
-        author: Ela
-        author_title: 🍀SPRING !
+        author: zeiber
+        author_title: 打工人打工魂打工都是人上人
         location: 'HangZhou, China'
         avatar: /img/avatar.png
         avatar_rounded: true
         gravatar: 
-        follow_link: 'https://github.com/ElaBosak233'
-        social_links:
-            Github:
-                icon: fab fa-github
-                url: 'https://github.com/ElaBosak233'
-            Facebook:
-                icon: fab fa-facebook
-                url: 'https://www.facebook.com/ela.bosak.92372'
-            Twitter:
-                icon: fab fa-twitter
-                url: 'https://twitter.com/ElaBosakCN'
-            Afdian:
-                icon: fas fa-bolt
-                url: 'https://afdian.net/@ElaBosak233'
-            RSS:
-                icon: fas fa-rss
-                url: /atom.xml
+        follow_link: 'https://github.com/zeinber'
     -
         position: left
         type: toc
@@ -129,7 +113,7 @@ widgets:
         position: left
         type: links
         links:
-            Valkyie: 'https://valkyrie.ela.ac.cn'
+            fiteen: 'https://blog.fiteen.top'
     -
         position: left
         type: categories

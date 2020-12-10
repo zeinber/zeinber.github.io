@@ -6,13 +6,14 @@ tags:
 categories: iOS
 ---
 
+
+<!--more-->
+
 ## 工具
 
 + [Clutch](https://github.com/KJCracks/Clutch)
 + 一台越狱手机（实验机为 iPhone5S，系统 iOS 8.1.3）
 + 终端
-
-<!--more-->
 
 ## 具体操作
 

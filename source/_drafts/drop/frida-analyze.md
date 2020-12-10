@@ -1,13 +1,13 @@
 ---
-title: ECDH秘钥协商算法原理
+title: frida
 date: 2020-03-19 15:43:11
 tags:
-    - 密码学
-categories: 算法
+    - 工具
+categories: 逆向
 toc: true
 ---
 
-ECDH 全称是椭圆曲线迪菲-赫尔曼秘钥交换（Elliptic Curve Diffie–Hellman key Exchange），主要是用来在一个不安全的通道中建立起安全的共有加密资料，一般来说交换的都是私钥，这个密钥一般作为“对称加密”的密钥而被双方在后续数据传输中使用。
+`Frida` 是一个可以 `hook App` 的动态代码工具包，可以向 `Windows`、`macOS`、`Linux`、`iOS`、`Android` 和`QNX` 的本机应用程序中注入 `JavaScript` 或自己的库代码。
 
 <!--more-->
 
