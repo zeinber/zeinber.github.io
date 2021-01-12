@@ -153,7 +153,7 @@ in UITouch:
 用户点击的事件触发在 UICalloutBarButton 上，而 UICalloutBarButton 显然是一个按钮。在 iOS 中，按钮允许 target-action 的方式对其进行监控。
 通过打印 UICalloutBarButton 的属性值，发现 m_action 去标识具体的方法，方法名刚好就是操作的英文单词，点击 copy 以后结果如下，
 ```objectivec
-// 粘贴
+(lldb) po [touch.view _ivarDescription]
 in UICalloutBarButton:
 	m_action (SEL): paste:
 ```
