@@ -52,8 +52,8 @@ UIKIT_EXTERN NSNotificationName const UITextViewTextDidChangeNotification;
 + 当一个触摸亊件生成时，系统会将其加入 UIApplication 的事件队列中。
 + UIApplication 会取出队列最前面的事件，通过 sendEvent: 方法分发到应用程序的主窗口 window。
 + 主窗口 window 会在当前视图层次结构中找到一个最合适的视图来处理触摸事件，具体流程如下
-  + 调用当前视图的 `pointInside:withEvent:` 方法，判断触摸点是否在当前视图内。
-  + 如果返回 NO，那么 `hitTest:WithEvent:` 就返回 nil。如果返回 YES，就继续遍历子视图，发送 `hitTest:withEvent:` 消息，直到有视图返回非空对象时返回该对象（或者在全局视图遍历完毕并都返回空对象时返回自身）。
+  + 调用当前视图的 pointInside:withEvent: 方法，判断触摸点是否在当前视图内。
+  + 如果返回 NO，那么 hitTest:WithEvent: 就返回 nil。如果返回 YES，就继续遍历子视图，发送 hitTest:withEvent: 消息，直到有视图返回非空对象时返回该对象（或者在全局视图遍历完毕并都返回空对象时返回自身）。
 
 #### 触发事件响应
 + 触发事件将沿着响应者链传递，传递规则如下，
@@ -132,7 +132,7 @@ UIPasteboard.generalPasteboard.string = @“粘贴的内容”;
 遗憾的是，当用户复制粘贴的时候，并没有调用上述方法，系统应该是通过更底层的 API 实现功能的。
 重新回到监控剪切板的响应链方案，问题就转换为筛选出剪切板工具栏上的按钮点击事件。
 
-**筛选 touch 规则**
+### 筛选 touch 规则
 有了之前的经验，这边就直接打印点击工具栏时 touch 的属性值，如下
 ```objectivec
 (lldb) po [touch _ivarDescription]
