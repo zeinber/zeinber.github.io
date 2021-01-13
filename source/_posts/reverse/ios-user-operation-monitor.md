@@ -7,15 +7,15 @@ categories: 研究
 toc: true
 ---
 
-键盘与剪切板是用户使用频率最高的两个组件，之前因为业务原因我也调研过这两个组件，本文将要介绍一套对于键盘与剪切板进行监控的方案。
+键盘与剪切板是用户使用频率最高的两个组件，本文主要探究的是键盘与剪切板的监控方案。
 
 <!--more-->
 
 ## 键盘
-能唤起键盘的方案有几种，我做了如下归类
+能唤起键盘的方案有3种，归类如下
 + UITextField、UITextView 原生输入框
 + WebView 上的 INPUT 和 TEXTAREA
-+ 通过 coreText 实现的 TextView，知名的有 YYKit 中的 YYTextView
++ 非继承重写的 TextView，知名的有 YYKit 中的 YYTextView
   
 为了下面方便介绍，将上述3种情况依次简称为情况一、情况二、情况三。
 
@@ -43,9 +43,11 @@ UIKIT_EXTERN NSNotificationName const UITextViewTextDidChangeNotification;
     }];
 ```
 但是上述的方案只能满足情况一，对于情况二和情况三就显得力不从心了。 
+因此需要另辟蹊径。重新审视需求，发现三者有一个共同点，就是通过键盘进行输入。
+因此接下来就从如何监听键盘点击事件入手。
+
 
 ### 响应链
-既然暴露的 API 没法实现，那就转换一下思路。
 从原理上分析，用户的点击其实就是一个响应链的过程，因此为了寻找新的解决方案，需要先介绍一下什么是响应链。
 当一个点击事件产生后，会触发寻找事件接受者和触发事件响应这2个步骤。
 #### 寻找事件接受者
@@ -61,7 +63,7 @@ UIKIT_EXTERN NSNotificationName const UITextViewTextDidChangeNotification;
     + 如果当前 view 是控制器的 view，那么控制器就是下一个响应者。
     + 如果在视图顶层还不能处理事件，那么就传给 window 对象处理。
     + 如果 window 对象也不能处理，则将其传给 UIApplication 对象。
-    + 如果 UIApplication 对象也不能处理，就可能传给UIAppDelegate 对象处理。
+    + 如果 UIApplication 对象也不能处理，就可能传给 UIAppDelegate 对象处理。
     + 如果都不能处理，事件将被丢弃。
 
 ### 破局
@@ -70,10 +72,10 @@ UIKIT_EXTERN NSNotificationName const UITextViewTextDidChangeNotification;
 + 分发事件对象：`-[UIApplication sendEvent:]`
 
 #### 查找响应视图
-这2个是主窗口 window 在当前视图层次结构中找到一个最合适的视图来处理触摸事件的方法，因此对于一次 touch 事件，会被频繁的方法作为监控入口显然是不合适的。
+这2个是主窗口 window 在当前视图层次结构中找到一个最合适的视图来处理触摸事件的方法，因此对于一次 touch 事件，会被频繁调用的方法作为监控入口显然是不合适的。
 
 #### 分发事件对象
-`-[UIApplication sendEvent:]`是分发事件给 window 的方法，在一个事件发生时只会触发一次，因此比较适合做监控入口。
+-[UIApplication sendEvent:] 是分发事件给 window 的方法，在一个事件发生时只会触发一次，因此比较适合做监控入口。
 先来看一下该方法的定义
 ```objectivec
 // UIApplication.h
@@ -106,7 +108,7 @@ typedef NS_ENUM(NSInteger, UITouchPhase) {
 // 能响应触摸事件的 view
 @property(nullable,nonatomic,readonly,strong) UIView                          *view;
 ```
-打印一下点击键盘时 UITouch 对象的属性值，具体如下
+打印一下点击键盘时 UITouch 对象的属性值，
 ```objectivec
 (lldb) po [touch _ivarDescription]
 <UITouch: 0x101710650>:
@@ -115,7 +117,7 @@ in UITouch:
 	_window (UIWindow*): <UIRemoteKeyboardWindow: 0x103908800>
 	_view (UIView*): <UIKeyboardDockView: 0x103a10720>
 ```
-这里看到 window 为 UIRemoteKeyboardWindow，它是键盘事件响应的 window，因此对于键盘事件可以通过判断 window 是否为 UIRemoteKeyboardWindow 过滤，具体代码如下
+这里看到 window 为 UIRemoteKeyboardWindow，它是键盘事件响应的 window，因此对于键盘事件可以通过判断 window 是否为 UIRemoteKeyboardWindow 进行过滤，
 ```objectivec
 /// 是否为键盘事件
 - (BOOL)isKeyboardWithTouch:(UITouch *)touch {
@@ -125,7 +127,7 @@ in UITouch:
 ```
 
 ## 剪切板
-对于剪切板，可以通过 +[UIPasteBoard generalPasteboard] 方法获取到系统的剪切板, 当粘贴事件发生时，粘贴的内容会被写入到 UIPasteboard。手动写入粘贴内容到粘贴板代码如下
+对于剪切板，可以通过 +[UIPasteBoard generalPasteboard] 方法获取到系统的剪切板对象，当粘贴事件发生时，粘贴的内容会被写入到 UIPasteboard。手动写入粘贴内容到粘贴板代码如下
 ```objectivec
 UIPasteboard.generalPasteboard.string = @“粘贴的内容”;
 ```
@@ -133,7 +135,7 @@ UIPasteboard.generalPasteboard.string = @“粘贴的内容”;
 重新回到监控剪切板的响应链方案，问题就转换为筛选出剪切板工具栏上的按钮点击事件。
 
 ### 筛选 touch 规则
-有了之前的经验，这边就直接打印点击工具栏时 touch 的属性值，如下
+有了之前的经验，这边就直接打印点击工具栏时 touch 的属性值，
 ```objectivec
 (lldb) po [touch _ivarDescription]
 <UITouch: 0x1080237d0>:
@@ -151,18 +153,19 @@ in UITouch:
 ```
 如果需要确定用户的具体操作，还需要在这基础上在做过滤。
 用户点击的事件触发在 UICalloutBarButton 上，而 UICalloutBarButton 显然是一个按钮。在 iOS 中，按钮允许 target-action 的方式对其进行监控。
-通过打印 UICalloutBarButton 的属性值，发现 m_action 去标识具体的方法，方法名刚好就是操作的英文单词，点击 copy 以后结果如下，
+点击剪切板上的 Copy 并打印 UICalloutBarButton 的属性值，发现 m_action 的结果如下，
 ```objectivec
 (lldb) po [touch.view _ivarDescription]
 in UICalloutBarButton:
 	m_action (SEL): paste:
 ```
-通过判断 m_action 的值即可知道用户再剪切板上进行了什么操作。
-附剪切板工具栏上的复制、粘贴、剪切的 action
+通过判断 m_action 的值即可知道用户在剪切板上的具体操作。
+附剪切板工具栏上的复制、粘贴、剪切的 m_action 值。
 ```objectivec
 copy:
 paste:
 cut:
 ```
-## demo地址
-[demo地址](https://github.com/zeinber/ZBUserOperationMonitor)
+## 总结
+经过上述的探究以及分析，即可完成对用户键盘与剪切板的监控。完整的代码已经上传到 GitHub。
+附上[demo地址](https://github.com/zeinber/ZBUserOperationMonitor)
